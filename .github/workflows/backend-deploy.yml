@@ -21,9 +21,9 @@ jobs:
           username: ubuntu
           host: ${{ secrets.EC2_HOST }}
           key: ${{ secrets.EC2_SSH_KEY }}
-          source: "."
+          source: "./*"
           target: ~/docker
-          strip_components: 2
+          strip_components:
 
       - name: Docker compose up
         uses: appleboy/ssh-action@master
