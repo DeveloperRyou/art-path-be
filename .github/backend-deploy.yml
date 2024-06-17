@@ -1,0 +1,36 @@
+name: BE deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  deploy:
+    name: Deploy BE
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: SCP all files
+        uses: appleboy/scp-action@master
+        with:
+          username: ubuntu
+          host: ${{ secrets.EC2_HOST }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          source: "."
+          target: ~/docker
+          strip_components: 2
+
+      - name: Docker compose up
+        uses: appleboy/ssh-action@master
+        with:
+          username: ubuntu
+          host: ${{ secrets.EC2_HOST }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            docker-compose -f ~/docker/docker-compose.yml down
+            docker-compose -f ~/docker/docker-compose.yml up --build -d
