@@ -5,6 +5,7 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
+
 @app.on_event("startup")
 def boot_server():
     logging.info("server boot ...")
