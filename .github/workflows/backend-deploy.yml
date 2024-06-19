@@ -23,7 +23,6 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           source: "./*"
           target: ~/docker
-          rm: true
 
       - name: Docker compose up
         uses: appleboy/ssh-action@master
