@@ -3,7 +3,7 @@ from uuid import UUID
 from sqlalchemy import ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from src.db.core import Base
+from src.model.db_core import Base
 
 
 class RecordTable(Base):

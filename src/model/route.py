@@ -3,7 +3,7 @@ from uuid import UUID
 from sqlalchemy import JSON, Float, String
 from sqlalchemy.orm import Mapped, mapped_column
 
-from src.db.core import Base
+from src.model.db_core import Base
 
 
 class RouteTable(Base):

@@ -4,7 +4,7 @@
 python3 -m venv venv
 source venv/bin/activate
 pip3 install -r requirements.txt
-python3 src/main.py
+python3 src/main.py (or, uvicorn src.main:app --host=0.0.0.0)
 ```
 
 ### If dependency changes, please enter this code and commit
@@ -37,3 +37,9 @@ alembic upgrade heads
 ```bash
 alembic downgrade -1
 ```
+
+
+## How to access Swagger UI
+- local: http://localhost:8000/docs
+
+- Docker: http://localhost:80/docs
