@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
 
-from src.crud.record import get_records_by_owner_id
+from src.crud.records import get_records_by_owner_id
 from src.model.db_core import get_session
 from src.schema.record import RecordResponse
 
