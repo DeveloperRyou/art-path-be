@@ -3,7 +3,7 @@ import logging
 import uvicorn
 from fastapi import FastAPI
 
-from src.api import test, user
+from src.api import test, user, record, records
 
 app = FastAPI()
 
@@ -20,6 +20,8 @@ def shutdown_server():
 
 app.include_router(test.router)
 app.include_router(user.router, prefix="/users", tags=["User"])
+app.include_router(record.router, prefix="/record", tags=["Record"])
+app.include_router(records.router, prefix="/records", tags=["Records"])
 
 
 if __name__ == "__main__":
