@@ -3,7 +3,7 @@ import logging
 import uvicorn
 from fastapi import FastAPI
 
-from src.api import test, user, record, records
+from src.api import record, records, routing, test, user
 
 app = FastAPI()
 
@@ -22,6 +22,7 @@ app.include_router(test.router)
 app.include_router(user.router, prefix="/users", tags=["User"])
 app.include_router(record.router, prefix="/record", tags=["Record"])
 app.include_router(records.router, prefix="/records", tags=["Records"])
+app.include_router(routing.router, prefix="/routing", tags=["Routing"])
 
 
 if __name__ == "__main__":
