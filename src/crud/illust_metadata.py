@@ -33,6 +33,7 @@ def get_illust_metadata_contour(db: Session, illust_metadata_id: UUID):
             IllustMetadataTable.id,
             IllustMetadataTable.contour_points
         ).filter(IllustMetadataTable.id == illust_metadata_id ).first()
+
         if illust_metadata is None:
             raise HTTPException(status_code=404, detail=f"Item not found")
     except:
@@ -45,6 +46,7 @@ def get_illust_metadata_badge_image(db: Session, illust_metadata_id: UUID):
     try:
         illust_metadata = db.query(
             IllustMetadataTable.id,
+            IllustMetadataTable.name,
             IllustMetadataTable.badge_image
         ).filter(IllustMetadataTable.id == illust_metadata_id).first()
         if illust_metadata is None:
@@ -58,7 +60,7 @@ def update_illust_metadata(db: Session, illust_metadata_id: UUID, illust_metadat
     try:
         _illust_metadata = db.query(IllustMetadataTable).filter(IllustMetadataTable.id == illust_metadata_id).first()
         _illust_metadata.name = illust_metadata.name
-        _illust_metadata.genre = illust_metadata.genre,
+        _illust_metadata.genre = str(illust_metadata.genre),
         _illust_metadata.original_image = illust_metadata.original_image,
         _illust_metadata.badge_image = illust_metadata.badge_image,
         _illust_metadata.contour_points = illust_metadata.contour_points

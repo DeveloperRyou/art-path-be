@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from src.crud.illust_metadata import create_illust_metadata, delete_illust_metadata, get_illust_metadata_contour, get_illust_metadata_badge_image, update_illust_metadata
 from src.model.db_core import get_session
-from src.schema.illust_metadata import IllustMetadataCreate, IllustMetadataResponse
+from src.schema.illust_metadata import IllustMetadataCreate, IllustMetadataResponse, IllustMetadataContourResponse, IllustMetadataBadgeImageResponse, IllustMetadataUpdate
 
 router = APIRouter()
 
@@ -28,7 +28,7 @@ def create_dataset(
     "/contour/{illust_metadata_id}",
     operation_id="read_illust_metadata_contour",
     summary="Read IllustMetadata Contour Points",
-    response_model=IllustMetadataResponse,
+    response_model=IllustMetadataContourResponse,
     status_code=status.HTTP_200_OK,
 )
 def read_illust_metadata_contour(
@@ -42,7 +42,7 @@ def read_illust_metadata_contour(
     "/badge_image/{illust_metadata_id}",
     operation_id="read_illust_metadata_badge_image",
     summary="Read IllustMetadata Badge Image",
-    response_model=IllustMetadataResponse,
+    response_model=IllustMetadataBadgeImageResponse,
     status_code=status.HTTP_200_OK,
 )
 def read_illust_metadata_badge_image(
@@ -62,7 +62,7 @@ def read_illust_metadata_badge_image(
 )
 def update_dataset(
     illust_metadata_id: UUID,
-    illust_metadata: IllustMetadataCreate,
+    illust_metadata: IllustMetadataUpdate,
     db: Session = Depends(get_session),
 ):
     return update_illust_metadata(db=db, illust_metadata_id=illust_metadata_id, illust_metadata=illust_metadata)
