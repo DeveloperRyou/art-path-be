@@ -20,9 +20,12 @@ router = APIRouter()
 def routing(
     latitude: float,
     longitude: float,
-    illust_id: str,
+    illust_metadata_id: UUID,
     db: Session = Depends(get_session),
 ):
     return generate_route(
-        db=db, latitude=latitude, longitude=longitude, illust_id=illust_id
+        db=db,
+        latitude=latitude,
+        longitude=longitude,
+        illust_metadata_id=illust_metadata_id,
     )
