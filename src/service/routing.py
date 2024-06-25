@@ -1,3 +1,4 @@
+import random
 from uuid import UUID
 
 import numpy as np
@@ -10,7 +11,12 @@ from src.schema.routing import RoutingResponse
 
 
 def generate_route(
-    db: Session, latitude: float, longitude: float, illust_metadata_id: UUID
+    db: Session,
+    latitude: float,
+    longitude: float,
+    illust_metadata_id: UUID,
+    num_generation: int,
+    distance: float,
 ):
     try:
         # 相対座標の取得
@@ -20,13 +26,39 @@ def generate_route(
 
         contours = []
 
-        start_pos_lat = illust_metadata[1][0]["latitude"]
-        start_pos_lng = illust_metadata[1][0]["longitude"]
+        if num_generation == 0:
+            start_pos_lat = illust_metadata[1][0]["latitude"]
+            start_pos_lng = illust_metadata[1][0]["longitude"]
 
-        for v in illust_metadata[1]:
-            contours.append(
-                [v["latitude"] - start_pos_lat, v["longitude"] - start_pos_lng]
-            )
+            for v in illust_metadata[1]:
+                contours.append(
+                    [v["latitude"] - start_pos_lat, v["longitude"] - start_pos_lng]
+                )
+        else:
+            start_idx = 1
+            if num_generation == 1:
+                start_idx = int(len(illust_metadata[1]) / 2)
+            elif num_generation == 2:
+                start_idx = int(len(illust_metadata[1]) / 4)
+            elif num_generation == 3:
+                start_idx = int(len(illust_metadata[1]) * 3 / 4)
+            else:
+                start_idx = random.randrange(1, len(illust_metadata[1]) - 1)
+
+            start_pos_lat = illust_metadata[1][start_idx]["latitude"]
+            start_pos_lng = illust_metadata[1][start_idx]["longitude"]
+
+            for i in range(start_idx, len(illust_metadata[1]) - 1):
+                v = illust_metadata[1][i]
+                contours.append(
+                    [v["latitude"] - start_pos_lat, v["longitude"] - start_pos_lng]
+                )
+
+            for i in range(0, start_idx + 1):
+                v = illust_metadata[1][i]
+                contours.append(
+                    [v["latitude"] - start_pos_lat, v["longitude"] - start_pos_lng]
+                )
 
         latlngs = []
 
@@ -35,7 +67,7 @@ def generate_route(
         max_values = np.max(contours_np, axis=0)
         min_values = np.min(contours_np, axis=0)
 
-        s = 10  # 散歩距離
+        s = distance  # 散歩距離
         a = max_values[1] - min_values[1]
         b = max_values[0] - min_values[0]
         x = s / (180 * (1.2 * a + b))

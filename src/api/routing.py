@@ -21,6 +21,8 @@ def routing(
     latitude: float,
     longitude: float,
     illust_metadata_id: UUID,
+    num_generation: int = 0,
+    distance: float = 10.0,
     db: Session = Depends(get_session),
 ):
     return generate_route(
@@ -28,4 +30,6 @@ def routing(
         latitude=latitude,
         longitude=longitude,
         illust_metadata_id=illust_metadata_id,
+        num_generation=num_generation,
+        distance=distance,
     )
