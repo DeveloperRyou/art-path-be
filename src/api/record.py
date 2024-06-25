@@ -12,17 +12,18 @@ router = APIRouter()
 
 
 @router.post(
-    "/{user_id}",
+    "/{user_id}/{illust_metadata_id}",
     operation_id="create_record",
     summary="Create Record",
     response_model=RecordResponse,
     status_code=status.HTTP_201_CREATED,
 )
 def create_dataset(
-    record: RecordCreate,
+    user_id: str,
+    illust_metadata_id: UUID,
     db: Session = Depends(get_session),
 ):
-    return create_record(db=db, record=record)
+    return create_record(db=db, user_id=user_id, illust_metadata_id=illust_metadata_id)
 
 
 @router.get(

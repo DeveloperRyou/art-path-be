@@ -6,14 +6,21 @@ from sqlalchemy.orm import Session
 from src.model.record import RecordTable
 from src.schema.record import RecordCreate, RecordUpdate
 
+from src.model.illust_metadata import IllustMetadataTable
 
-def create_record(db: Session, record: RecordCreate):
+
+def create_record(db: Session, user_id: str, illust_metadata_id: UUID):
     try:
+        badge = db.query(
+            IllustMetadataTable.name,
+            IllustMetadataTable.badge_image
+        ).filter(IllustMetadataTable.id == illust_metadata_id).first()
+
         record = RecordTable(
             id=uuid4(),
-            name=record.name,
-            profile_image=record.profile_image,
-            owner_id=record.owner_id
+            name=badge.name,
+            profile_image=badge.badge_image,
+            owner_id=user_id
         )
         db.add(record)
         db.commit()
