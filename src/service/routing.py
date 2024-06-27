@@ -79,25 +79,26 @@ def generate_route(
         # 経路探索
         points = []
         total_distance = 0.0
-        for i in range(len(latlngs) - 1):
-            url = "https://routing.openstreetmap.de/routed-foot/route/v1/walking/"
+        url = "https://routing.openstreetmap.de/routed-foot/route/v1/walking/"
+        way = ""
+        for i in range(len(latlngs)):
+            way += f"{str(latlngs[i][1])},{str(latlngs[i][0])};"
 
-            way = f"{str(latlngs[i][1])},{str(latlngs[i][0])};{str(latlngs[i+1][1])},{str(latlngs[i+1][0])}"
+        way = way[:-1]
+        url += way + "?geometries=geojson&overview=full"
 
-            url += way + "?geometries=geojson&overview=full"
+        response = requests.get(url)
 
-            response = requests.get(url)
+        # レスポンスを処理
+        if response.status_code == 200:
+            data = response.json()  # JSON形式のレスポンスを取得
+        else:
+            raise HTTPException(status_code=500, detail=f"OSRM API")
 
-            # レスポンスを処理
-            if response.status_code == 200:
-                data = response.json()  # JSON形式のレスポンスを取得
-            else:
-                raise HTTPException(status_code=500, detail=f"OSRM API")
+        for coordinate in data["routes"][0]["geometry"]["coordinates"]:
+            points.append([coordinate[1], coordinate[0]])
 
-            for coordinate in data["routes"][0]["geometry"]["coordinates"]:
-                points.append([coordinate[1], coordinate[0]])
-
-            total_distance += data["routes"][0]["distance"] / 1000
+        total_distance += data["routes"][0]["distance"] / 1000
 
         # 経路補正
         result = []
